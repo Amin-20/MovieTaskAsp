@@ -19,7 +19,7 @@ namespace MovieTask.Controllers
             _movieService = movieService;
         }
 
-        [HttpGet("ahsdbasd")]
+        [HttpGet]
         public async Task<IActionResult> Get()
         {
             int waitTimeInSeconds = 5;
