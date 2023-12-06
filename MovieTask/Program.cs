@@ -18,6 +18,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IMovieRepository, MovieRepository>();
 builder.Services.AddScoped<IMovieService, MovieService>();
 builder.Services.AddScoped<MovieGetService>();
+builder.Services.AddScoped<BackgroundWorkerService>();
 
 var connection = builder.Configuration.GetConnectionString("myConn");
 builder.Services.AddDbContext<MovieDbContext>(opt =>
