@@ -6,13 +6,11 @@ namespace MovieTask.Services
     {
         private readonly IConfiguration _configuration;
         readonly ILogger<BackgroundWorkerService> _logger;
-        private MovieController _controller;
 
-        public BackgroundWorkerService(ILogger<BackgroundWorkerService> logger, IConfiguration configuration, MovieController controller)
+        public BackgroundWorkerService(ILogger<BackgroundWorkerService> logger, IConfiguration configuration)
         {
             _logger = logger;
             _configuration = configuration;
-            _controller = controller;
         }
 
         protected async override Task ExecuteAsync(CancellationToken stoppingToken)
@@ -21,7 +19,6 @@ namespace MovieTask.Services
             {
                 var minute = int.Parse(_configuration["Time:minute"]);
                 _logger.LogInformation("Worker running at : {time}", DateTimeOffset.Now);
-                _controller.Get();
                 await Task.Delay(minute * 1000, stoppingToken);
             }
         }
