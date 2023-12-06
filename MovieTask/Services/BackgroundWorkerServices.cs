@@ -1,22 +1,29 @@
-﻿namespace MovieTask.Services
-{
-    public class BackgroundWorkerService : IHostedService
-    {
-        readonly ILogger<BackgroundWorkerService> _logger;
+﻿using MovieTask.Controllers;
 
-        public BackgroundWorkerService(ILogger<BackgroundWorkerService> logger)
+namespace MovieTask.Services
+{
+    public class BackgroundWorkerService : BackgroundService
+    {
+        private readonly IConfiguration _configuration;
+        readonly ILogger<BackgroundWorkerService> _logger;
+        private MovieController _controller;
+
+        public BackgroundWorkerService(ILogger<BackgroundWorkerService> logger, IConfiguration configuration, MovieController controller)
         {
             _logger = logger;
+            _configuration = configuration;
+            _controller = controller;
         }
 
-        public async Task StartAsync(CancellationToken cancellationToken)
+        protected async override Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            throw new NotImplementedException();
-        }
-
-        public Task StopAsync(CancellationToken cancellationToken)
-        {
-            throw new NotImplementedException();
+            while (!stoppingToken.IsCancellationRequested)
+            {
+                var minute = int.Parse(_configuration["Time:minute"]);
+                _logger.LogInformation("Worker running at : {time}", DateTimeOffset.Now);
+                _controller.Get();
+                await Task.Delay(minute * 1000, stoppingToken);
+            }
         }
     }
 }
